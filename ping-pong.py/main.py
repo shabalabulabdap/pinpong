@@ -37,6 +37,9 @@ game = True
 finish = False
 clock = time.Clock()
 FPS = 60
+goals_player1 = 0
+goals_player2 = 0
+WIN_SCORE = 11
 
 racket1 = Player("racket.png", 30,200, 50, 150, 4)
 racket2 = Player("racket.png", 620,200, 50, 150, 4)
@@ -63,15 +66,56 @@ while game:
         ball.rect.x += speed_x
         ball.rect.y += speed_y
 
+        statistics1 = font1.render(str(goals_player1), True, (0,0,0))
+        statistics2 = font1.render(str(goals_player2), True, (0,0,0))
+
         if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
             speed_x *= -1
 
         if ball.rect.y >win_height - 50 or  ball.rect.y < 0:
             speed_y *= -1
-        
+
+        if ball.rect.x < 0:
+            finish = True
+            goals_player2+= 1
+            window.blit(lose1, (300, 200))  
+            time.delay(1000)
+        if ball.rect.x > win_width:
+            goals_player1+=1
+            finish = True
+            window.blit(lose2, (300, 200))
+            time.delay(1000)
+
+        if goals_player1>=10 and goals_player2>=10:
+
+            if abs(goals_player1 - goals_player2)==2:
+                if goals_player1 > goals_player2:
+                   print("PLAYER 1 WON")   
+                if goals_player2 > goals_player1:
+                    print("PLAYER 2 WON")
+                finish = True
+
+        if goals_player1 == WIN_SCORE:
+            print("PLAYER 1 WON")
+            finish = True
+        elif goals_player2 == WIN_SCORE:
+            print("PLAYER 2 WON")
+            finish = True
+
+        window.blit(statistics1, (35, 25))
+        window.blit(statistics2, (win_width-35, 25))
         racket1.reset()
         racket2.reset()
         ball.reset()
     
+    else:
+        time.delay(2000)
+        finish = False
+        ball.rect.x = 350
+        ball.rect.y = 200
+        goals_player1 = 0
+        goals_player2 = 0
+
+
     display.update()
     clock.tick(FPS)
