@@ -50,6 +50,11 @@ font1 = font.SysFont("Arial", 35)
 lose1 = font1.render("Player 1 LOST!!!!", True, (180, 0, 0))
 lose2 = font1.render("Player 2 LOST!!!!", True, (180, 0, 0))
 
+mixer.init()
+mixer.music.load("mfdoom.mp3")
+mixer.music.set_volume(0.15)
+mixer.music.play()
+
 speed_x =3
 speed_y=3
 
@@ -90,17 +95,25 @@ while game:
 
             if abs(goals_player1 - goals_player2)==2:
                 if goals_player1 > goals_player2:
-                   print("PLAYER 1 WON")   
+                   print("PLAYER 1 WON")  
+                   goals_player1 = 0
+                   goals_player2 = 0 
                 if goals_player2 > goals_player1:
                     print("PLAYER 2 WON")
+                    goals_player1 = 0
+                    goals_player2 = 0
                 finish = True
 
         if goals_player1 == WIN_SCORE:
             print("PLAYER 1 WON")
             finish = True
+            goals_player1 = 0
+            goals_player2 = 0
         elif goals_player2 == WIN_SCORE:
             print("PLAYER 2 WON")
             finish = True
+            goals_player1 = 0
+            goals_player2 = 0
 
         window.blit(statistics1, (35, 25))
         window.blit(statistics2, (win_width-35, 25))
@@ -113,8 +126,7 @@ while game:
         finish = False
         ball.rect.x = 350
         ball.rect.y = 200
-        goals_player1 = 0
-        goals_player2 = 0
+        
 
 
     display.update()
